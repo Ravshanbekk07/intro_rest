@@ -43,33 +43,33 @@ def postask(request):
         except KeyError:
             return Response({'error':'invalid data'})
         
-# @api_view(['GET','POST','PUT'])      
-# def putask(request,pk):
-#     if request.method == 'PUT':
-#         if pk is None:
-#                 return Response({'error': 'Invalid request'}, status=400)
-#         else:
-#             try:
-#                 data =request.data
+@api_view(['GET','POST','PUT'])      
+def putask(request,pk):
+    if request.method == 'PUT':
+        if pk is None:
+                return Response({'error': 'Invalid request'}, status=400)
+        else:
+            try:
+                data =request.data
 
-#                 task = Task.objects.get(pk=pk)
-#                 task.title = data.get('title')
+                task = Task.objects.get(pk=pk)
+                task.title = data.get('title')
                 
-#                 task.description = data.get('description')
-#                 task.save()
-#                 return Response(model_to_dict(task))
-#             except KeyError:
-#                 return Response({'error':'invalid data'})
-# @api_view(['GET','POST','PUT','DELETE'])        
-# def deletetask(request,pk):
-#     if request.method == 'DELETE':
-#             if pk is None:
-#                 return Response({'error': 'Invalid request'}, status=400)
+                task.description = data.get('description')
+                task.save()
+                return Response(model_to_dict(task))
+            except KeyError:
+                return Response({'error':'invalid data'})
+@api_view(['GET','POST','PUT','DELETE'])        
+def deletetask(request,pk):
+    if request.method == 'DELETE':
+            if pk is None:
+                return Response({'error': 'Invalid request'}, status=400)
         
-#             else:
-#                 task = Task.objects.get(pk=pk)
+            else:
+                task = Task.objects.get(pk=pk)
                 
-#                 task.delete()
-#                 return Response({'status':'deleted'})
+                task.delete()
+                return Response({'status':'deleted'})
         
     
