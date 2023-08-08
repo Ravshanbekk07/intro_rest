@@ -17,7 +17,7 @@ def getask(request:Request,title=None)-> Response:
         if title is None:
             tasks = Task.objects.all()
             task_dic = [model_to_dict(task) for task in tasks]
-            return Response(task_dic)
+            return Response(task_dic,status=status.HTTP_200_OK)
         else:
             try:
                 
@@ -26,11 +26,11 @@ def getask(request:Request,title=None)-> Response:
                 task = Task.objects.get(title=title)
                 
                 task_dict = model_to_dict(task)
-                return Response(task_dict)
+                return Response(task_dict,status=status.HTTP_200_OK)
             except Task.DoesNotExist:
-                return Response({'error':'task not found'}) 
+                return Response({'error':'task not found'},status=status.HTTP_404_NOT_FOUND) 
 
-@api_view(['GET','POST'])   
+@api_view(['POST'])   
 def postask(request):
     if request.method == 'POST':
         data =request.data
@@ -39,11 +39,11 @@ def postask(request):
                 title = data.get('title'),
                 description = data.get('description'))
             task.save()
-            return Response(model_to_dict(task))
+            return Response(model_to_dict(task),status=status.HTTP_201_CREATED)
         except KeyError:
-            return Response({'error':'invalid data'})
+            return Response({'error':'invalid data'},status=status.HTTP_400_BAD_REQUEST)
         
-@api_view(['GET','POST','PUT'])      
+@api_view(['PUT'])      
 def putask(request,pk):
     if request.method == 'PUT':
         if pk is None:
@@ -57,10 +57,10 @@ def putask(request,pk):
                 
                 task.description = data.get('description')
                 task.save()
-                return Response(model_to_dict(task))
+                return Response(model_to_dict(task),status=status.HTTP_200_OK)
             except KeyError:
                 return Response({'error':'invalid data'})
-@api_view(['GET','POST','PUT','DELETE'])        
+@api_view(['DELETE'])        
 def deletetask(request,pk):
     if request.method == 'DELETE':
             if pk is None:
@@ -70,6 +70,6 @@ def deletetask(request,pk):
                 task = Task.objects.get(pk=pk)
                 
                 task.delete()
-                return Response({'status':'deleted'})
+                return Response({'status':'deleted'},status=status.HTTP_200_OK)
         
     
